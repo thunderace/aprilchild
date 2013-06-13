@@ -103,7 +103,7 @@ BEGIN
 	-- adding support person into addressbook
 	CALL amy_user_create_relation(_id, 2);
 	SELECT * FROM amy_users WHERE id=_id;
-END;
+END
 $$
 
 SELECT 'FUNCTION amy_user_delete' AS Creating$$
@@ -126,7 +126,7 @@ BEGIN
 	DELETE FROM amy.user_custom_relations WHERE user_id=_id;
 	DELETE FROM amy.users WHERE id=_id;
 	RETURN 't';
-END;
+END
 $$
 
 SELECT 'TABLE amy_user_relations' AS Creating$$
@@ -171,8 +171,7 @@ SELECT 'PROCEDURE amy_user_find_relations' AS Creating$$
 
 	Finds all users related to existing one. Something like address book.
 */
-DROP PROCEDURE IF EXISTS amy_user_find_relations
-$$
+DROP PROCEDURE IF EXISTS amy_user_find_relations$$
 CREATE PROCEDURE amy_user_find_relations
 (
 	_user_id integer
@@ -180,8 +179,7 @@ CREATE PROCEDURE amy_user_find_relations
 BEGIN
 	SELECT ur.related_user_id AS user_id, ur.created_at, u.username, u.service, u.email, u.nickname, u.picture FROM amy_user_relations AS ur INNER JOIN amy_users AS u ON ur.related_user_id=u.id WHERE ur.user_id=_user_id ORDER BY u.nickname;
 	SELECT 0 AS user_id, ucr.created_at, '' AS username, '' AS service, ucr.email, ucr.nickname, '' FROM amy_user_custom_relations AS ucr WHERE ucr.user_id=_user_id ORDER BY ucr.nickname;
-END;
-$$
+END$$
 
 
 SELECT 'FUNCTION amy_user_create_relation' AS Creating$$
@@ -190,8 +188,7 @@ SELECT 'FUNCTION amy_user_create_relation' AS Creating$$
 	Adds new user relation from existing user.
 	Returns true on success.
 */
-DROP FUNCTION IF EXISTS amy_user_create_relation
-$$
+DROP FUNCTION IF EXISTS amy_user_create_relation$$
 CREATE FUNCTION amy_user_create_relation
 (
 	_user_id integer,
@@ -208,8 +205,7 @@ BEGIN
 		INSERT INTO amy_user_custom_relations (user_id, nickname, email) VALUES (_user_id, _nickname, _email);
 	END IF;
 	RETURN 't';
-END;
-$$
+END$$
 
 
 SELECT 'FUNCTION amy_user_delete_relation' AS Creating$$
@@ -218,8 +214,7 @@ SELECT 'FUNCTION amy_user_delete_relation' AS Creating$$
 	Removes user relation. Takes related_user_id as parameter. Can be used for existing users only.
 	Returns true on success.
 */
-DROP FUNCTION IF EXISTS amy_user_delete_relation
-$$
+DROP FUNCTION IF EXISTS amy_user_delete_relation$$
 CREATE FUNCTION amy_user_delete_relation
 (
 	_user_id integer,
@@ -236,8 +231,7 @@ BEGIN
 		DELETE FROM amy.user_custom_relations WHERE user_id=_user_id AND email=_email;
 	END IF;
 	RETURN 't';
-END;
-$$
+END$$
 
 SELECT 'PROCEDURE amy_user_update_relation' AS Creating$$
 /* FUNC: user_update_relation
@@ -245,8 +239,7 @@ SELECT 'PROCEDURE amy_user_update_relation' AS Creating$$
 	Updates custom user relation.
 	Returns true on success.
 */
-DROP PROCEDURE IF EXISTS amy_user_update_relation
-$$
+DROP PROCEDURE IF EXISTS amy_user_update_relation$$
 CREATE PROCEDURE amy_user_update_relation
 (
 	_user_id integer,
@@ -274,8 +267,7 @@ BEGIN
 	END IF;
 	CALL amy_user_find_relations(_user_id);
 	-- SELECT * FROM CALL amy_user_find_relations(_user_id) WHERE email=_email LIMIT 1;
-END;
-$$
+END$$
 
 SELECT amy_user_create_relation(3, 2, NULL, NULL)
 $$
