@@ -1,1 +1,0 @@
-../../../trunk/_migrations/setup_amy_editor.sql

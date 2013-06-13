@@ -1,1 +1,0 @@
-../../../../../trunk/client/view.js
